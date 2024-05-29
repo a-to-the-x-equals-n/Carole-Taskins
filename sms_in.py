@@ -2,16 +2,19 @@ import imaplib
 import email
 from email.header import decode_header
 import re
+from util import load_vars
 
 def check_email_for_sms():
+
+    EMAIL, PASSWORD = load_vars("EMAIL", "PASSWORD")
     # Connect to the email server
     mail = imaplib.IMAP4_SSL("imap.gmail.com")
-    mail.login("task.watch.24@gmail.com", "fygr xrhk fcsp ngsc")
+    mail.login(EMAIL, PASSWORD)
     mail.select("inbox")
 
     # Search for Google Voice SMS emails
-    status, messages = mail.search(None, '(FROM "(910) 507-5707" UNSEEN)')
-    # status, messages = mail.search(None, '(FROM "(910) 459-2653")')
+    # status, messages = mail.search(None, '(FROM "(910) 459-2653" UNSEEN)')
+    status, messages = mail.search(None, '(FROM "(910) 459-2653")')
     email_ids = messages[0].split()
     phone_number = None
 

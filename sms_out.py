@@ -1,12 +1,12 @@
 import smtplib
 from email.mime.text import MIMEText
+from util import load_vars
 
 def send_sms_via_email(to_number, carrier_gateway = "vtext.com"):
     # Email configuration
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    smtp_username = 'task.watch.24@gmail.com'
-    smtp_password = 'fygr xrhk fcsp ngsc'
+    smtp_username, smtp_password = load_vars("EMAIL", "PASSWORD")
 
     # Construct the email
     to_email = f"{to_number}@{carrier_gateway}"
@@ -29,7 +29,7 @@ def send_sms_via_email(to_number, carrier_gateway = "vtext.com"):
 
 def message():
     msg = f"""
-    Hello!\nMy name is Carole Taskins, the Task Queen!\nI'm currently under development, but hopefully I'll be up and running soon.
+    Hello!\nMy name is Carole Taskins, the Task Queen!\nI'm currently under development, but I'll be up and running soon.
     """
     return msg
 
