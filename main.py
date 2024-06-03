@@ -1,5 +1,3 @@
-from sms_in import check_email_for_sms
-from sms_out import send_sms_via_email
 from time import sleep
 from users import User
 from emailer import Emailer
