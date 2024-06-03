@@ -5,6 +5,7 @@
 *.code-workspace
 
 notes.txt
+users.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
