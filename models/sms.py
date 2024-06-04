@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 import smtplib
 import re
 
-class Emailer:
+class SMS_bot:
 
     # Temporary User object for access to name and phone number
     temp_user = None
@@ -30,14 +30,14 @@ class Emailer:
     ''' Inbound Email Functions '''
 
 
-    def check_email(self, users):
+    def check_messages(self, users):
         self.__login()
 
         # Search for Google Voice SMS emails
         for user in users:
             status, messages = self.IMAP.search(None, f'FROM "{user.phone_num}" UNSEEN')
             if status == "OK":
-                Emailer.temp_user = user
+                SMS_bot.temp_user = user
                 self.__extract_sms(messages)
 
         self.__logout()

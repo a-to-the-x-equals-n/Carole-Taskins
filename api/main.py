@@ -1,14 +1,14 @@
 from time import sleep
 from models.users import User
-from models.emailer import Emailer
+from models.sms import SMS_bot
 
 def main():
 
     while True:
 
         users = User.load_users()
-        emailer = Emailer()
-        emailer.check_email(users)
+        bot = SMS_bot
+        bot.check_messages(users)
 
         sleep(4)
         print('sleeping...')
