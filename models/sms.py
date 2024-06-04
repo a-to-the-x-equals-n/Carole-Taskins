@@ -87,10 +87,10 @@ class SMS_bot:
         # TODO : write functionality to handle different commands from user
 
         # Format phone number in prep for Email to SMS gateways
-        format_number = re.sub(r'\D', '', Emailer.temp_user.phone_num)
+        format_number = re.sub(r'\D', '', SMS_bot.temp_user.phone_num)
 
         # Construct the email
-        recv_addr = f"{format_number}{Emailer.temp_user.carrier}"
+        recv_addr = f"{format_number}{SMS_bot.temp_user.carrier}"
         msg = MIMEText(self.__default_message())
         msg['From'] = self.EMAIL
         msg['To'] = recv_addr
@@ -112,7 +112,7 @@ class SMS_bot:
     @staticmethod
     def __default_message():
         msg = f"""
-        Hello {Emailer.temp_user.f_name}!\nMy name is Carole Taskins\nI'm currently under development, but hopefully I'll be up and running very soon.
+        Hello {SMS_bot.temp_user.f_name}!\nMy name is Carole Taskins\nI'm currently under development, but hopefully I'll be up and running very soon.
         """
         return msg
 

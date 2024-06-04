@@ -13,6 +13,10 @@ class User:
         return f'User(\n\t{self.f_name}\n\t{self.l_name}\n\t{self.phone_num}\n\t{self.carrier}\n)'
     
 
+    def user_msg(self, msg):
+        self.msg = msg
+    
+
     @classmethod
     def __json_to_dict(cls, user_data):
         return cls(
@@ -34,8 +38,4 @@ class User:
         for user in users:
             if user.phone_num == number:
                 return user
-        return None
-    
-    
-
-        
+        return None        
