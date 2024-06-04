@@ -1,29 +1,33 @@
 from api.util import load_vars
 import imaplib
 import email
-from email.header import decode_header
 from email.mime.text import MIMEText
 import smtplib
 import re
 
 class Emailer:
 
+    # Temporary User object for access to name and phone number
     temp_user = None
 
     def __init__(self):
         self.EMAIL, self.PASSWORD = load_vars("EMAIL", "PASSWORD")
-        self.MAIL = imaplib.IMAP4_SSL("imap.gmail.com")
-        self.SMTP_SERVER = 'smtp.gmail.com'
+        self.IMAP = imaplib.IMAP4_SSL("imap.gmail.com") # IMAP : Internet Message Access Protocol
+        self.SMTP = 'smtp.gmail.com' # SMTP : Simple Mail Transfer Protocol
         self.PORT = 587
         
 
     def __login(self):
-        self.MAIL.login(self.EMAIL, self.PASSWORD)
-        self.MAIL.select("inbox")
+        self.IMAP.login(self.EMAIL, self.PASSWORD)
+        self.IMAP.select("inbox")
     
 
     def __logout(self):
-        self.MAIL.logout()
+        self.IMAP.logout()
+        self.IMAP.close()
+
+
+    ''' Inbound Email Functions '''
 
 
     def check_email(self, users):
@@ -31,7 +35,7 @@ class Emailer:
 
         # Search for Google Voice SMS emails
         for user in users:
-            status, messages = self.MAIL.search(None, f'FROM "{user.phone_num}" UNSEEN')
+            status, messages = self.IMAP.search(None, f'FROM "{user.phone_num}" UNSEEN')
             if status == "OK":
                 Emailer.temp_user = user
                 self.__extract_sms(messages)
@@ -41,45 +45,48 @@ class Emailer:
 
     def __extract_sms(self, messages):
 
-        email_ids = messages[0].split()
-
-        for email_id in email_ids:
-            status, msg_data = self.MAIL.fetch(email_id, "(RFC822)")
+        for email_msg_id in messages[0].split():
+            _, msg_data = self.IMAP.fetch(email_msg_id, "(RFC822)")
             msg = email.message_from_bytes(msg_data[0][1])
-
-            # Decode the email subject to extract the phone number
-            subject, encoding = decode_header(msg["Subject"])[0]
-            if isinstance(subject, bytes):
-                subject = subject.decode(encoding if encoding else 'utf-8')
             
             # Extract the SMS content from the email
             if msg.is_multipart():
                 for part in msg.walk():
                     if part.get_content_type() == "text/plain":
-                        body = part.get_payload(decode=True).decode()
-                        sms = self.__extract_sms_helper(body)[28:]
-        
+                        body = part.get_payload(decode = True).decode()
+                        sms = self.__extract_sms_helper(body)
             else:
-                body = msg.get_payload(decode=True).decode()
-                sms = self.__extract_sms_helper(body)[28:]
-                
-            # print(f"From: {phone_number}: {sms_content[28:]}")
+                body = msg.get_payload(decode = True).decode()
+                sms = self.__extract_sms_helper(body)
 
             # Mark the email as read
-            self.MAIL.store(email_id, '+FLAGS', '\\Seen')
-
-            self.__build_reply()
-
-
-    def __extract_sms_helper(self, email_body):
-        # Find the SMS content within the email body
-        end_index = email_body.find("YOUR ACCOUNT")
-        if end_index != -1:
-            return email_body[:end_index].strip()
-        return email_body.strip()
+            self.IMAP.store(email_msg_id, '+FLAGS', '\\Seen')
+            self.__build_reply(sms)
 
 
-    def __build_reply(self):
+    def __extract_sms_helper(email_body):
+        '''
+            Since I'm having Google Voice forward all SMS messages to my email, I have to ignore all of the added Google
+            content included in the email.
+
+            This function extracts the pure text messsage from the user.
+        '''
+        end = email_body.find("YOUR ACCOUNT")
+
+        if end != -1:
+            return email_body[28:end].strip()
+        
+        return email_body[28:].strip()
+
+
+    ''' Outbound Email Functions '''
+
+
+    def __build_reply(self, sms):
+
+        # TODO : write functionality to handle different commands from user
+
+        # Format phone number in prep for Email to SMS gateways
         format_number = re.sub(r'\D', '', Emailer.temp_user.phone_num)
 
         # Construct the email
@@ -91,12 +98,13 @@ class Emailer:
 
         try:
             # Connect to the SMTP server and send the email
-            server = smtplib.SMTP(self.SMTP_SERVER, self.PORT)
+            server = smtplib.SMTP(self.SMTP, self.PORT)
             server.starttls()
             server.login(self.EMAIL, self.PASSWORD)
             server.sendmail(self.EMAIL, recv_addr, msg.as_string())
             server.quit()
             print("SMS sent successfully!")
+
         except Exception as e:
             print(f"Failed to send SMS: {e}")
 
