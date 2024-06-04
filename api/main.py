@@ -1,6 +1,6 @@
 from time import sleep
-from users import User
-from emailer import Emailer
+from models.users import User
+from models.emailer import Emailer
 
 def main():
 

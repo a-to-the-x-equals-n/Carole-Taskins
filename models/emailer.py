@@ -1,4 +1,4 @@
-from util import load_vars
+from api.util import load_vars
 import imaplib
 import email
 from email.header import decode_header
