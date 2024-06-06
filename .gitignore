@@ -3,9 +3,11 @@
 
 
 ### Python ### -------------------------------------------------------
-
 *.code-workspace
-
+cloud_run/app/firestore/*.json
+*.gitignore
+*.dockerignore
+*.gcloudignore
 notes.txt
 users.json
 

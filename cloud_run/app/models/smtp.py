@@ -3,6 +3,8 @@ from email.mime.text import MIMEText
 import smtplib
 import re
 
+
+
 class SMTPbot:
 
     # Temporary User object for access to name and phone number

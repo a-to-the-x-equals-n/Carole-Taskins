@@ -5,10 +5,10 @@ class HttpClient:
     def __init__(self, base_url):
         self.base_url = base_url
         self.COMMAND_FUNCTIONS = {
-            "new": self.post,
-            "list": self.get,
+            "new": self.post, 
+            "list": self.get, 
             "help": self.get,
-            "del": self.delete
+            "del": self.delete 
         }
 
 
