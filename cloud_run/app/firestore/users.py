@@ -2,15 +2,14 @@ import json
 
 class User:
 
-    def __init__(self, first, last, number, carrier):
-        self.f_name = first
-        self.l_name = last
+    def __init__(self, name, number, carrier):
+        self.name = name
         self.phone_num = number
         self.carrier = carrier
 
 
     def __str__(self):
-        return f'User(\n\t{self.f_name}\n\t{self.l_name}\n\t{self.phone_num}\n\t{self.carrier}\n)'
+        return f'User(\n\t{self.name}\n\t{self.phone_num}\n\t{self.carrier}\n)'
     
 
     def user_msg(self, msg):
@@ -20,8 +19,7 @@ class User:
     @classmethod
     def __json_to_dict(cls, user_data):
         return cls(
-            first=user_data['first_name'],
-            last=user_data['last_name'],
+            name=user_data['name'],
             number=user_data['phone_num'],
             carrier=user_data['carrier']
         )
