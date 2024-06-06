@@ -18,7 +18,7 @@ class HttpClient:
         args = parts[1:] if parts[1:] else None
 
         if cmd in self.COMMAND_FUNCTIONS:
-            self.COMMAND_FUNCTIONS[cmd](endpoint = cmd, params = args, headers = user.name.lower())
+            self.COMMAND_FUNCTIONS[cmd](endpoint = cmd, params = args, headers = {'name': user.name.lower()})
         else:
             self.post(endpoint = "error")
         
