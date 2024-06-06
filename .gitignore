@@ -1,9 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/
 
 
-.gcloudignore
-.dockerignore
-.gitignore
+
 ### Python ### -------------------------------------------------------
 
 *.code-workspace

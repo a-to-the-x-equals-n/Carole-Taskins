@@ -1,0 +1,32 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore all log files
+logs/*.log
+
+# Ignore any file named 'tempfile' in the src directory
+src/tempfile
+
+# Ignore all .env files
+.env
+
+# Ignore .git directory
+.git
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore VSCode settings folder
+.vscode/
+
+# Ignore MacOS specific files
+.DS_Store
+
+
+cloud_functions/*
+compute_engine/*
+
+cloud_functions/
+compute_engine/
