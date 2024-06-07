@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from cloud_run.app.models.sms import SMSbot
-from cloud_run.app.fire_store import fire_store_db as fdb
+from cloud_run.src.models.sms import SMSbot
+from cloud_run.src.database import fire_db as fdb
 
 app = Flask(__name__)
 
