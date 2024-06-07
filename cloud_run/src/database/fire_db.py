@@ -94,6 +94,6 @@ def del_task(name, id):
 
 
 if __name__ == "__main__":
-    # user_name = "logan"
-    # del_task(user_name, "001")
+    user_name = "logan"
+    del_task(user_name, "001")
     pass
