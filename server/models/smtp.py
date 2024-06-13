@@ -38,14 +38,11 @@ class SMTPbot:
 
 
     def list_tasks_scheduled(self, user, tasks):
-        if not tasks:
-            return
-        else:
-            response = "Daily reminder of current tasks:\n"
-            for task in tasks:
-                response += f"    {task['id']}: {task['details']}\n"
+        response = "Daily reminder of current tasks:\n"
+        for task in tasks:
+            response += f"    {task['id']}: {task['details']}\n"
 
-            self.send_sms(user, response)
+        self.send_sms(user, response)
         
 
     

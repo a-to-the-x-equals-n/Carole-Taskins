@@ -92,13 +92,11 @@ def reminder():
 
     for user in users:
         tasks = fire.list_tasks(user['name'])
+        if tasks:
+            print(tasks)
+            write_email.list_tasks_scheduled(user, tasks)
 
-        if not tasks:
-            yield jsonify({"message": f"No tasks to remind for {user['name']}"}), 200
-        
-        write_email.list_tasks_scheduled(user, tasks)
-
-    return jsonify({"message": "Reminders sent successfully"}), 200
+    return jsonify({"message": "Reminders sent successfully", 'users': users}), 200
 
         
 if __name__ == '__main__':
