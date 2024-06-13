@@ -87,11 +87,18 @@ def help():
 
 @app.route('/remind', methods = ['GET'])
 def reminder():
+
     users = fire.all_users()
+
     for user in users:
         tasks = fire.list_tasks(user['name'])
-    
+
+        if not tasks:
+            yield jsonify({"message": f"No tasks to remind for {user['name']}"}), 200
+        
         write_email.list_tasks_scheduled(user, tasks)
+
+    return jsonify({"message": "Reminders sent successfully"}), 200
 
         
 if __name__ == '__main__':
