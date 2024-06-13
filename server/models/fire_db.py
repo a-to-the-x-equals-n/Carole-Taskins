@@ -1,25 +1,12 @@
 from google.cloud import firestore
-from dotenv import load_dotenv
-from pathlib import Path
-import os
+from util import load_vars
 
-try:
-    # Determine the current directory of the script and locate the .env file
-    current_dir = Path(__file__).resolve().parent if "__file__" in locals() else Path.cwd()
-    envars = current_dir / ".env"
-    print(f'{envars}')
 
-    # Load the environment variables from the .env file
-    load_dotenv(envars)
-
-    # If any exception occurs during the process, raise an EnvFileError
-except Exception as e:
-        print(f'Error opening .env file: {str(e)}')
-
+PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
 # GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
 # print(f'{GOOGLE_CREDENTIALS}')
-db = firestore.Client(project = os.getenv('PROJECT_ID'), database = os.getenv('DATABASE')) # Initialize Datastore client
+db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datastore client
 
 
 def get_user(name):

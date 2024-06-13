@@ -1,4 +1,4 @@
-from compute_engine.util import load_vars
+from util import load_vars
 from email.mime.text import MIMEText
 import smtplib
 import re
