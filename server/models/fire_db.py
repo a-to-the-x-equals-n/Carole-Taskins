@@ -3,7 +3,7 @@ from util import load_vars
 
 
 PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
-print(DATABASE)
+
 # GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
 # print(f'{GOOGLE_CREDENTIALS}')

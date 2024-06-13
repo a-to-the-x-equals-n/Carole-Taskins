@@ -23,6 +23,7 @@ def load_vars(*args):
 
         # Load the environment variables from the .env file
         load_dotenv(envars)
+        print(envars)
 
     # If any exception occurs during the process, raise an EnvFileError
     except Exception as e:
@@ -30,3 +31,7 @@ def load_vars(*args):
     
     # Return a list of values for the given environment variable names
     return [os.getenv(arg) for arg in args]
+
+
+if __name__ == '__main__':
+    load_vars()
