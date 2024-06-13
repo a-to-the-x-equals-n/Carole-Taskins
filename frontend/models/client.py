@@ -1,4 +1,5 @@
 import requests
+import json
 
 class HttpClient:
 
@@ -18,26 +19,33 @@ class HttpClient:
         args = parts[1:] if parts[1:] else None
 
         if cmd in self.COMMAND_FUNCTIONS:
-            self.COMMAND_FUNCTIONS[cmd](endpoint = cmd, params = args, headers = {'name': user.name.lower()})
+            if cmd == "new" and args:
+                self.COMMAND_FUNCTIONS[cmd](endpoint = cmd, headers = {'name': user.name.lower()}, json = {'details': ' '.join(args)})
+            elif cmd == "del" and args:
+                task_id = args[0]
+                self.COMMAND_FUNCTIONS[cmd](endpoint = f"del/{task_id}", headers = {'name': user.name.lower()})
+            else:
+                self.COMMAND_FUNCTIONS[cmd](endpoint = cmd, headers={'name': user.name.lower()})
         else:
             self.post(endpoint = "error")
         
     
-    def post(self, endpoint, params = None, headers = None):
+    def post(self, endpoint, params = None, headers = None, json = None):
         url = f"{self.base_url}/{endpoint}"
-        requests.post(url, headers = headers, params = params)
+        return requests.post(url, params = params, headers = headers, json = json)
         
 
-    def get(self, endpoint, params = None, headers = None):
+    def get(self, endpoint, params = None, headers = None, json = None):
         url = f"{self.base_url}/{endpoint}"
-        return requests.get(url, headers = headers, params = params)
+        return requests.get(url, params = params, headers = headers, json = json)
 
 
-    def delete(self, endpoint, params = None, headers = None):
+    def delete(self, endpoint, params = None, headers = None, json = None):
         url = f"{self.base_url}/{endpoint}"
-        requests.delete(url, headers = headers, params = params)
+        requests.delete(url, params = params, headers = headers, json = json)
 
-    def get_users(self, endpoint = "users", params = None, headers = None):
+    def get_users(self, endpoint = "users", params = None, headers = None, json = None):
         url = f"{self.base_url}/{endpoint}"
-        return requests.get(url, headers = headers, params = params)
+        response = requests.get(url, params = params, headers = headers, json = json)
+        return response.json()
 

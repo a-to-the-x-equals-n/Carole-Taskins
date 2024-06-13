@@ -8,7 +8,7 @@ class User:
 
 
     def __str__(self):
-        return f'User(\n\t{self.name}\n\t{self.phone_num}\n\t{self.carrier}\n)'
+        return f'User(\n\t{self.name}\n\t{self.phone_num}\n\t{self.carrier}\n\t{self.sms}\n)'
     
 
     @classmethod
