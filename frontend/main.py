@@ -1,12 +1,13 @@
 from models.imap import IMAPbot
 from models.client import HttpClient
 from models.users import User
+from util import load_vars
 import time
 
 
 def main():
 
-    client = HttpClient("http://127.0.0.1:8080")
+    client = HttpClient(load_vars("URL")[0])
     user_data = client.get_users()
 
     users = create_users(user_data)
