@@ -8,14 +8,18 @@ write_email = SMTPbot()
 
 
 # NEW TASK
-@app.route('/new/<details>', methods = ['POST'])
-def new_task(details):
+@app.route('/new', methods=['POST'])
+def new_task():
 
     user = fire.get_user(request.headers.get('name'))
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
-    task_id = fire.new_task(user.name, details)
+    details = request.json.get('details')
+    if not details:
+        return jsonify({'error': 'Details not provided'}), 400
+    
+    task_id = fire.new_task(user['name'], details)
     write_email.new_task(user, task_id, details)
 
     return jsonify({'message': 'Task created', 'task_id': task_id}), 201
@@ -41,15 +45,15 @@ def unrecognized():
     
 
 # DELETE TASK
-@app.route('/del/<task_id>', methods = ['POST'])
+@app.route('/del/<task_id>', methods = ['DELETE'])
 def del_task(task_id):
     
     user = fire.get_user(request.headers.get('name'))
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
-    fire.del_task(user.name, task_id)
-    write_email.del_task(user.name, task_id)
+    fire.del_task(user['name'], task_id)
+    write_email.del_task(user, task_id)
     
     return jsonify({'message': f'Task {task_id} deleted'}), 200
 
@@ -62,7 +66,7 @@ def list_tasks():
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
-    tasks = fire.list_tasks(user.name)
+    tasks = fire.list_tasks(user['name'])
     write_email.list_tasks(user, tasks)
     
     return jsonify({'tasks': tasks}), 200
@@ -82,6 +86,8 @@ def help():
 
 @app.route('/remind', methods = ['GET'])
 def reminder():
+
+
     pass
 
         

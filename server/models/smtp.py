@@ -20,17 +20,17 @@ class SMTPbot:
 
     
     def new_task(self, user, task_id, details):
-        response = f'New task "{task_id} {details}" created successfully!'
+        response = f'Task {task_id}: "{details}" created successfully!'
         self.send_sms(user, response)
 
 
-    def list_tasks(self, user, task_dict):
+    def list_tasks(self, user, tasks):
 
-        if task_dict['tasks']:
+        if tasks:
             response = "Here's a list of your tasks:\n"
 
-            for task in task_dict['tasks']:
-                response += f'\t{task}\n'
+            for task in tasks:
+                response += f"      {task['id']}: {task['details']}\n"
         else:
             response = "You currently have no tasks."
         
@@ -49,22 +49,20 @@ class SMTPbot:
 
 
     def help(self, user):
-
-        response = f'''Here's all of the commands:\n
-        \t"del" followed by one of your task id's will remove it.\n
-        \t"new" followed by a brief description will create that task.\n
-        \t"list" will return a complete list of all current tasks.\n
-        '''
+        d = f"'del' followed by a task ID will remove it."
+        n = f"'new' then a description will create a task."
+        l = f"'list' will return all current tasks."
+        response = f'{d}\n{n}\n{l}'
         self.send_sms(user, response)
 
 
     def send_sms(self, user, response):
 
         # Format phone number in prep for Email to SMS gateways
-        format_number = re.sub(r'\D', '', user.phone_num)
+        format_number = re.sub(r'\D', '', str(user['phone_num']))
 
         # Construct the email
-        recv_addr = f"{format_number}{user.carrier}"
+        recv_addr = f"{format_number}{user['carrier']}"
         msg = MIMEText(response)
         msg['From'] = self.EMAIL
         msg['To'] = recv_addr

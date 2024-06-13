@@ -12,7 +12,6 @@ db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datas
 def get_user(name):
     user = db.collection('users').where('name', '==', name).limit(1).get()[0]
     user_dict = user.to_dict()
-    user_dict['id'] = user.id
     return user_dict
     
 
@@ -20,13 +19,13 @@ def get_user(name):
 # Function to fetch all users
 def all_users():
     user_collection = db.collection('users').stream()   # Retrieve all documents in the 'users' collection as a stream
-    all_users = {}                                      # Initialize an empty dictionary to store all users
+    all_users = []                                      # Initialize an empty dictionary to store all users
 
     # Iterate over each user document in the collection
     for user in user_collection:
 
         user_dict = user.to_dict()      # Convert each user document to a dictionary
-        all_users[user.id] = user_dict  # Use the document ID as the key in the dictionary
+        all_users.append(user_dict)  # Use the document ID as the key in the dictionary
     
     return all_users
 
@@ -38,16 +37,14 @@ def list_tasks(name):
     tasks_collection = tasks_collection_reference.stream()                      # Get all task documents
     
     # Create dictionary to store 'name' and 'tasks'
-    user_task_list = {
-        'tasks': []     # Initialize an empty list to store tasks
-    }
+    user_task_list = []
     
     # Iterate over each task document
     for task_doc in tasks_collection:
     
         task_dict = task_doc.to_dict()              # Convert task document to dictionary
         task_dict['id'] = task_doc.id               # Add task ID
-        user_task_list['tasks'].append(task_dict)   # Append task data to the 'tasks' list in the result dictionary
+        user_task_list.append(task_dict)   # Append task data to the 'tasks' list in the result dictionary
     
     return user_task_list
 
