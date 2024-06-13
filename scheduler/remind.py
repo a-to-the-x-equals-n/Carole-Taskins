@@ -1,4 +1,14 @@
+import requests
+import os
 
+def reminder():
+    url = os.getenv("CLOUD_RUN_URL")
 
-# TODO: write a reminder function that goes off everyday at 3 pm to remind
-#       all users of their current tasks
+    try:
+        response = requests.get(url) 
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Request to {url} failed: {e}")
+
+if __name__ == "__main__":
+    reminder()
