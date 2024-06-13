@@ -1,9 +1,9 @@
-
+from smtp import SMTPbot
 
 class SMSbot:
 
     @classmethod
-    def new_task():
+    def new_task(user, id, details):
         # TODO: new task
         pass
     

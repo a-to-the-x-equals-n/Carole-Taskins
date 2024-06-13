@@ -7,6 +7,7 @@ try:
     # Determine the current directory of the script and locate the .env file
     current_dir = Path(__file__).resolve().parent if "__file__" in locals() else Path.cwd()
     envars = current_dir / ".env"
+    print(f'{envars}')
 
     # Load the environment variables from the .env file
     load_dotenv(envars)
@@ -15,10 +16,18 @@ try:
 except Exception as e:
         print(f'Error opening .env file: {str(e)}')
 
-
-GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
+# GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
+# print(f'{GOOGLE_CREDENTIALS}')
 db = firestore.Client(project = os.getenv('PROJECT_ID'), database = os.getenv('DATABASE')) # Initialize Datastore client
+
+
+def get_user(name):
+    user = db.collection('users').where('name', '==', name).limit(1).get()[0]
+    user_dict = user.to_dict()
+    user_dict['id'] = user.id
+    return user_dict
+    
 
 
 # Function to fetch all users
@@ -43,7 +52,6 @@ def list_tasks(name):
     
     # Create dictionary to store 'name' and 'tasks'
     user_task_list = {
-        'name': name,   # Use the user's name as provided,
         'tasks': []     # Initialize an empty list to store tasks
     }
     
@@ -83,6 +91,7 @@ def new_task(name, details):
     new_task_document_reference = tasks_collection_reference.document(new_task_id)  # Reference to the new task document using the new task ID
     new_task_document_reference.set(new_task_data)                                  # Set the new task data in the Firestore document
 
+    return new_task_id
 
 # Delete a task by user name and task ID
 def del_task(name, id):
@@ -94,6 +103,6 @@ def del_task(name, id):
 
 
 if __name__ == "__main__":
-    user_name = "logan"
-    del_task(user_name, "001")
-    pass
+    name = "logan"
+    #3 new_task(name, "inventory")
+    del_task(name, "002")

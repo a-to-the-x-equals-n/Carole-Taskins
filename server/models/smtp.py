@@ -18,16 +18,54 @@ class SMTPbot:
 
     ''' Outbound Email Functions '''
 
+    
+    def new_task(self, user, task_id, details):
+        response = f'New task "{task_id} {details}" created successfully!'
+        self.send_sms(user, response)
+
+
+    def list_tasks(self, user, task_dict):
+
+        if task_dict['tasks']:
+            response = "Here's a list of your tasks:\n"
+
+            for task in task_dict['tasks']:
+                response += f'\t{task}\n'
+        else:
+            response = "You currently have no tasks."
+        
+        self.send_sms(user, response)
+
+    
+    def del_task(self, user, task_id):
+
+        response = f'Task "{task_id}" deleted!'
+        self.send_sms(user, response)
+
+
+    def error(self, user):
+        response = f'Unrecognized message.\nPlease try again or type "help" for a list of acceptable commands.'
+        self.send_sms(user, response)
+
+
+    def help(self, user):
+
+        response = f'''Here's all of the commands:\n
+        \t"del" followed by one of your task id's will remove it.\n
+        \t"new" followed by a brief description will create that task.\n
+        \t"list" will return a complete list of all current tasks.\n
+        '''
+        self.send_sms(user, response)
+
+
     def send_sms(self, user, response):
 
-        # TODO : write functionality to handle different commands from user
-
         # Format phone number in prep for Email to SMS gateways
-        format_number = re.sub(r'\D', '', SMTPbot.temp_user.phone_num)
+        format_number = re.sub(r'\D', '', user.phone_num)
 
         # Construct the email
-        recv_addr = f"{format_number}{SMTPbot.temp_user.carrier}"
-        msg = MIMEText(self.build_reply(user, response))
+        recv_addr = f"{format_number}{user.carrier}"
+        msg = MIMEText(response)
         msg['From'] = self.EMAIL
         msg['To'] = recv_addr
         msg['Subject'] = ""
