@@ -1,6 +1,7 @@
 from google.cloud import firestore
-from util import load_vars
 import os
+from util import load_vars
+
 
 
 PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
@@ -8,7 +9,6 @@ PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
 GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
 db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datastore client
-
 
 def get_user(name):
     user = db.collection('users').where('name', '==', name).limit(1).get()[0]
@@ -89,5 +89,5 @@ def del_task(name, id):
 
 if __name__ == "__main__":
     name = "logan"
-    #3 new_task(name, "inventory")
-    del_task(name, "002")
+    new_task(name, "inventory")
+    # del_task(name, "002")

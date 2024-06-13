@@ -31,7 +31,3 @@ def load_vars(*args):
     
     # Return a list of values for the given environment variable names
     return [os.getenv(arg) for arg in args]
-
-
-if __name__ == '__main__':
-    load_vars()
