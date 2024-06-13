@@ -1,12 +1,12 @@
 from google.cloud import firestore
 from util import load_vars
+import os
 
 
 PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
 
-# GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
-# print(f'{GOOGLE_CREDENTIALS}')
+GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
 db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datastore client
 
 
