@@ -1,13 +1,27 @@
 from google.cloud import firestore
 import os
-from util import load_vars
+from dotenv import load_dotenv
+from pathlib import Path
+import os
 
 
+try:
+    # Determine the current directory of the script and locate the .env file
+    current_dir = Path(__file__).resolve().parent if "__file__" in locals() else Path.cwd()
+    envars = current_dir / ".env"
+    # Load the environment variables from the .env file
+    load_dotenv(envars)
+# If any exception occurs during the process, raise an EnvFileError
+except Exception as e:
+    print(f'Error opening .env file: {str(e)}')
 
-PROJECT, DATABASE = load_vars("PROJECT_ID", "DATABASE")
 
-GOOGLE_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS').replace('wsl.localhost/Ubuntu/', "")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS
+PROJECT = os.getenv("PROJECT_ID")
+DATABASE = os.getenv("DATABASE")
+CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = CREDENTIALS
+
 db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datastore client
 
 def get_user(name):
@@ -82,9 +96,7 @@ def new_task(name, details):
 def del_task(name, id):
     user_document_reference = db.collection('task_collection').document(name)           # Reference to the user document in the 'task_collection' collection
     task_document_reference = user_document_reference.collection('tasks').document(id)  # Reference to the specific task document in the 'tasks' subcollection
-    task_document_reference.delete()                                                    # Delete task
-
-
+    task_document_reference.delete()    
 
 
 if __name__ == "__main__":
