@@ -30,11 +30,22 @@ class SMTPbot:
             response = "Here's a list of your tasks:\n"
 
             for task in tasks:
-                response += f"      {task['id']}: {task['details']}\n"
+                response += f"    {task['id']}: {task['details']}\n"
         else:
             response = "You currently have no tasks."
         
         self.send_sms(user, response)
+
+
+    def list_tasks_scheduled(self, user, tasks):
+        if not tasks:
+            return
+        else:
+            response = "Daily reminder of current tasks:\n"
+            for task in tasks:
+                response += f"    {task['id']}: {task['details']}\n"
+            self.send_sms(user, response)
+        
 
     
     def del_task(self, user, task_id):

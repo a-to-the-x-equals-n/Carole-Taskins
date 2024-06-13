@@ -67,6 +67,7 @@ def list_tasks():
         return jsonify({'error': 'User not found'}), 404
     
     tasks = fire.list_tasks(user['name'])
+
     write_email.list_tasks(user, tasks)
     
     return jsonify({'tasks': tasks}), 200
@@ -86,9 +87,11 @@ def help():
 
 @app.route('/remind', methods = ['GET'])
 def reminder():
-
-
-    pass
+    users = fire.all_users()
+    for user in users:
+        tasks = fire.list_tasks(user['name'])
+    
+        write_email.list_tasks_scheduled(user, tasks)
 
         
 if __name__ == '__main__':
