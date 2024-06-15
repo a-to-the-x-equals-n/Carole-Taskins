@@ -63,13 +63,11 @@ class IMAPbot:
                         cls.IMAP.store(email_msg_id, '+FLAGS', '\\Seen')
                         
                         testing = cls.__extract_sms_helper(body)
-                        print(testing)
                         return testing
             else:
                 body = msg.get_payload(decode = True).decode()
                 cls.IMAP.store(email_msg_id, '+FLAGS', '\\Seen')
                 testing = cls.__extract_sms_helper(body)
-                print(testing)
                 return testing
 
 
@@ -81,9 +79,16 @@ class IMAPbot:
 
             This function extracts the pure text messsage from the user.
         '''
-        end = email_body.find("YOUR ACCOUNT")
+        end_phrases = [
+        "YOUR ACCOUNT",
+        "To respond to this text message, reply to this email or visit Google Voice."
+        ]
 
-        if end != -1:
-            return email_body[28:end].strip()
+        # Find the earliest occurrence of any end phrase
+        end = len(email_body)
+        for phrase in end_phrases:
+            position = email_body.find(phrase)
+            if position != -1 and position < end:
+                end = position
         
-        return email_body[28:].strip()
+        return email_body[28:end].strip()

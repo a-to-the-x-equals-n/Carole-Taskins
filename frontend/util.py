@@ -23,7 +23,6 @@ def load_vars(*args):
 
         # Load the environment variables from the .env file
         load_dotenv(envars)
-
     # If any exception occurs during the process, raise an EnvFileError
     except Exception as e:
         print(f'Error opening .env file: {str(e)}')

@@ -8,6 +8,7 @@ import time
 def main():
 
     client = HttpClient(load_vars("URL")[0])
+    
     user_data = client.get_users()
 
     users = create_users(user_data)
