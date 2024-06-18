@@ -1,6 +1,6 @@
-from imap import IMAPbot
-from client import HttpClient
-from users import User
+from models.imap import IMAPbot
+from models.client import HttpClient
+from models.users import User
 from util import load_vars
 import time
 
