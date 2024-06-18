@@ -1,4 +1,0 @@
-requests
-python-dotenv
-flask
-google-cloud-firestore

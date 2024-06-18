@@ -1,0 +1,35 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore system files
+.DS_Store
+*.swp
+
+# Ignore Docker-related files
+Dockerfile
+server/Dockerfile
+.dockerignore
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore any logs or temporary files
+*.log
+*.tmp
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore environment variable files
+server/models/.env
+
+# Ignore local configuration files
+config.local.json
