@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+raincloud-423420-b47070b1bb62.json
+
 # Distribution / packaging
 .Python
 build/
