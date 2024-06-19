@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import asyncio
 
 
 try:
@@ -24,7 +25,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = CREDENTIALS
 
 db = firestore.Client(project = PROJECT, database = DATABASE) # Initialize Datastore client
 
-def get_user(name):
+async def get_user(name):
     user = db.collection('users').where('name', '==', name).limit(1).get()[0]
     user_dict = user.to_dict()
     return user_dict
@@ -32,7 +33,7 @@ def get_user(name):
 
 
 # Function to fetch all users
-def all_users():
+async def all_users():
     user_collection = db.collection('users').stream()   # Retrieve all documents in the 'users' collection as a stream
     all_users = []                                      # Initialize an empty dictionary to store all users
 
@@ -46,7 +47,7 @@ def all_users():
 
 
 # Get a masterlist of a users tasks
-def list_tasks(name):
+async def list_tasks(name):
     user_document_reference = db.collection('task_collection').document(name)   # Reference to the user document in the 'task_collection' collection
     tasks_collection_reference = user_document_reference.collection('tasks')    # Reference to the 'tasks' subcollection within the user document
     tasks_collection = tasks_collection_reference.stream()                      # Get all task documents
@@ -93,7 +94,7 @@ def new_task(name, details):
     return new_task_id
 
 # Delete a task by user name and task ID
-def del_task(name, id):
+async def del_task(name, id):
     user_document_reference = db.collection('task_collection').document(name)           # Reference to the user document in the 'task_collection' collection
     task_document_reference = user_document_reference.collection('tasks').document(id)  # Reference to the specific task document in the 'tasks' subcollection
     task_document_reference.delete()    
